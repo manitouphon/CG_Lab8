@@ -1,29 +1,27 @@
-#ifdef definded(_WIN32)
-#include <GL/glut.h>
-#elif  (__linux__)
-#include <GL/glut.h>
-#elif  (__APPLE__)
-#include <GLUT/glut.h>
-#endif
 
 #include "util/DDA.hpp"
 #include "util/midPoint.hpp"
+#include "util/circleMidPoint.hpp"
+
 
 
 
 extern float boundaryWidth;
 extern float boundaryHeight;
-extern float delta;
+
 
 extern Color secondaryColor;
 
 extern float target1[2];
 extern float target2[2];
-extern float targetWidth;
+extern float circle[3];
+extern int itemWidth;
 
 
 extern bool doDDA;
 extern bool doMidpoint;
+extern bool doCircleMidPoint;
+extern bool isDrawingGrid;
 
 
 
@@ -52,7 +50,7 @@ void drawBoundary(){
     int x = 0;
     int y = boundaryHeight;
 
-    for (x = 0; x < boundaryWidth; x = x + delta){
+    for (x = 0; x < boundaryWidth; x = x + itemWidth){
         glBegin(GL_LINE_STRIP);
 
         glVertex2d(x,0);
@@ -67,7 +65,7 @@ void drawBoundary(){
     x = boundaryWidth;
     y = 0;
 
-    for (y = 0; y < boundaryHeight; y = y + delta){
+    for (y = 0; y < boundaryHeight; y = y + itemWidth){
         glBegin(GL_LINE_STRIP);
 
         glVertex2d(0,y);
@@ -90,14 +88,28 @@ void drawBoundary(){
 void rDisplay(){
     glClear(GL_COLOR_BUFFER_BIT);
 
+    glBegin(GL_POINTS);
+    glVertex2d(-100,-100);
+    glEnd();
+    glFlush();
+
+    if(isDrawingGrid)
     drawBoundary();
+ 
     
+    glColor3f(secondaryColor.getR(), secondaryColor.getG(), secondaryColor.getB());
     // drawTargetLine();
     if(doDDA){
-        DDAMainDriver(target1[0], target1[1],target2[0], target2[1]);
+        
+        DDAMainDriver(target1[0], target1[1],target2[0], target2[1],itemWidth);
     }
     if(doMidpoint){
-        midpointDriver(target1[0], target1[1],target2[0], target2[1]);
+        midpointDriver(target1[0], target1[1],target2[0], target2[1],itemWidth);
+    }
+    if(doCircleMidPoint){
+        circleMidPointMainDriver(circle[0], circle[1], circle[2],itemWidth);
+        cout << "circle";
+
     }
 
 }

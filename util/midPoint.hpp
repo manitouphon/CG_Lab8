@@ -8,11 +8,17 @@
 #endif
 
 
-void midpointDriver(float x1, float y1, float x2, float y2)
+
+
+
+void midpointDriver(float x1, float y1, float x2, float y2, int deviation)
 {
     //Probably A bit improvised algorithm
+    x1 = roundToNearestX(x1, deviation);
+    x2 = roundToNearestX(x2, deviation);
+    y1 = roundToNearestX(y1, deviation);
+    y2 = roundToNearestX(y2, deviation);
 
-    glColor3f(0, 1, 0);
     int dx = x2 - x1;
     int dy = y2 - y1;
 
@@ -22,11 +28,13 @@ void midpointDriver(float x1, float y1, float x2, float y2)
         int x = x1, y = y1;
         glBegin(GL_POINTS);
         glVertex2f(x, y);
+        glEnd();
+        drawSinglePixel(x,y,deviation);
 
         // iterate through value of X
         while (x < x2)
         {
-            x++;
+            x = x + deviation;
 
             // E or East is chosen
             if (d < 0)
@@ -36,9 +44,12 @@ void midpointDriver(float x1, float y1, float x2, float y2)
             else
             {
                 d += (dy - dx);
-                y++;
+                y = y + deviation;
             }
+            glBegin(GL_POINTS);
             glVertex2f(x, y);
+            glEnd();
+            drawSinglePixel(x,y,deviation);
         }
     }
 
@@ -49,11 +60,13 @@ void midpointDriver(float x1, float y1, float x2, float y2)
         int x = x1, y = y1;
         glBegin(GL_POINTS);
         glVertex2f(x, y);
+        glEnd();
+        drawSinglePixel(x,y,deviation);
 
         // iterate through value of X
         while (y < y2)
         {
-            y++;
+            y = y + deviation;
 
             // E or East is chosen
             if (d < 0)
@@ -63,40 +76,16 @@ void midpointDriver(float x1, float y1, float x2, float y2)
             else
             {
                 d += (dx - dy);
-                x++;
+                x = x + deviation;
             }
 
+            glBegin(GL_POINTS);
             glVertex2f(x, y);
+            glEnd();
+            drawSinglePixel(x,y,deviation);
         }
     }
 
-    //ALGORITH FROM SLIDE:
-    // glColor3f(0, 1, 0);
-
-    // float dy = y2 - y1;
-    // float dx = x2 - x1;
-    // float d = (2 * dy) - dx;
-    // float dE = 2 * dy;
-    // float dNE = 2 * (dy - dx);
-    // float x = x1;
-    // float y = y1;
-
-    // //Write first pixel
-    // glBegin(GL_POINTS);
-    // glVertex2i(x, y);
-
-    // while(x < x2){
-    //     if(d<=0){
-    //         d += dE;
-    //         x += 1;
-    //     }
-    //     else{
-    //         d += dNE;
-    //         x += 1;
-    //         y += 1;
-    //     }
-    //     glVertex2f(x,y);
-    // }
-    // glEnd();
-    // glFlush();
+    
 }
+

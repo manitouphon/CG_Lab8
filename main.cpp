@@ -20,18 +20,21 @@ Color secondaryColor;
 
 float boundaryWidth;
 float boundaryHeight;
-float delta;
+int itemWidth;
 
 
 float target1[2] = {12.5, 12.5};
 float target2[2] = {22.5, 97.5};
-float targetWidth = 1;
+float circle[3] = {50,50,40};    //x,y, radius
+
 
 int mainWindow;
 int rWindow;
 
 bool doDDA = false;
 bool doMidpoint = false;
+bool doCircleMidPoint = true;
+bool isDrawingGrid = true;
 
 void init(void)
 {
@@ -53,7 +56,7 @@ int main(int argc, char **argv)
     background.setColor(1.0, 1.0, 1.0);
     boundaryWidth = 100;
     boundaryHeight = 100;
-    delta = 5;
+    itemWidth = 5;
 
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
